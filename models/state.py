@@ -23,7 +23,7 @@ class State(BaseModel, Base):
         instances with state_id equals to the current State.id
         """
 
-        from models import Storage
+        from models import storage
 
         # get all the cities in a dictionary
         total_cities = storage.all(City)

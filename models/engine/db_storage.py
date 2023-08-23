@@ -56,7 +56,6 @@ class DBStorage:
 
             for Class in classes:
                 objects = session.query(Class).all()
-                print("Objects:", objects)
                 for obj in objects:
                     key = f'{obj.__class__.__name__}.{obj.id}'
                     result[key] = obj
