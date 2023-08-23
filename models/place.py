@@ -4,12 +4,14 @@ from models.base_model import BaseModel, Base
 from sqlalchemy import Table, Column, Integer, Float, String, ForeignKey
 from sqlalchemy.orm import relationship
 
-
- # many to many relationship
+# many to many relationship
 place_amenity = Table('place_amenity', Base.metadata,
-        Column("place_id", String(60), ForeignKey('places.id'), primary_key=True),
-        Column("amenity_id", String(60), ForeignKey('amenities.id'), primary_key=True)
+        Column("place_id", String(60),
+               ForeignKey('places.id'), primary_key=True),
+        Column("amenity_id", String(60),
+               ForeignKey('amenities.id'), primary_key=True)
 )
+
 
 class Place(BaseModel, Base):
     """ A place to stay """
@@ -28,7 +30,8 @@ class Place(BaseModel, Base):
 
     # for DBStorage
 
-    reviews = relationship("Review", backref="place", cascade="all, delete-orphan")
+    reviews = relationship("Review", backref="place",
+                           cascade="all, delete-orphan")
 
     @property
     def reviews(self):
@@ -48,7 +51,8 @@ class Place(BaseModel, Base):
         return review_result
 
     # for DBStorage
-    amenities = relationship('Amenity', secondary=place_amenity, viewonly=False)
+    amenities = relationship('Amenity',
+                             secondary=place_amenity, viewonly=False)
 
     # for FileStorage
 
