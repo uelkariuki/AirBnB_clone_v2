@@ -25,7 +25,7 @@ class Place(BaseModel, Base):
     reviews = relationship("Review", backref="place", cascade="all, delete-orphan")
 
     @property
-    def ReviewsList(self):
+    def reviews(self):
         """
         getter attribute cities that returns the list of City
         instances with state_id equals to the current State.id
@@ -35,9 +35,8 @@ class Place(BaseModel, Base):
 
         # get all the cities in a dictionary
         total_reviews = storage.all(Review)
-
+        review_result = []
         for review in total_reviews.values():
-            review_result = []
             if review.place_id == self.id:
                 review_result.append(review)
         return review_result
