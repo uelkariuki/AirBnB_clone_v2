@@ -7,6 +7,7 @@ from sqlalchemy import Column, String, Integer, Date
 
 Base = declarative_base()
 
+
 class BaseModel:
     """A base class for all hbnb models"""
 
@@ -31,8 +32,6 @@ class BaseModel:
                                                      '%Y-%m-%dT%H:%M:%S.%f')
             kwargs['created_at'] = datetime.strptime(kwargs['created_at'],
                                                      '%Y-%m-%dT%H:%M:%S.%f')
-
-
             del kwargs['__class__']
             self.__dict__.update(kwargs)
 

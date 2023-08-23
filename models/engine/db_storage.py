@@ -17,6 +17,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 
+
 class DBStorage:
     """ Class DBStorage for the new engine DBStorage"""
     __engine = None
@@ -30,7 +31,8 @@ class DBStorage:
         host = os.environ.get('HBNB_MYSQL_HOST')
         database = os.environ.get('HBNB_MYSQL_DB')
 
-        self.__engine = create_engine(f"mysql+mysqldb://{user}:{password}@{host}/{database}", pool_pre_ping=True)
+        self.__engine = create_engine(f"mysql+mysqldb://{user}:\
+{password}@{host}/{database}", pool_pre_ping=True)
 
         if os.environ.get("HBNB_ENV") == "test":
             metadata = MetaData(bind=self.__engine)
@@ -89,7 +91,6 @@ class DBStorage:
 
         session.commit()
 
-
     def delete(self, obj=None):
         """
         delete from the current database session obj if not None
@@ -99,7 +100,7 @@ class DBStorage:
             self.__session.delete(obj)
 
     def reload(self):
-        """ 
+        """
         create all tables in the database(feature of SQLAlchemy)
         (WARNING: all classes who inherit from Base must be
         imported before calling

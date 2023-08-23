@@ -3,6 +3,8 @@
 from models.base_model import BaseModel, Base
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String
+
+
 class State(BaseModel, Base):
     """ State class """
 
@@ -10,9 +12,10 @@ class State(BaseModel, Base):
     name = Column(String(128), nullable=False)
 
     # for DBStorage
-    cities = relationship("City", backref="state", cascade="all, delete-orphan")
+    cities = relationship("City", backref="state",
+                          cascade="all, delete-orphan")
 
-    #for FileStorage
+    # for FileStorage
     @property
     def cities(self):
         """
