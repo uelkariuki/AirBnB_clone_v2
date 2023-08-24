@@ -38,7 +38,7 @@ class Place(BaseModel, Base):
                            cascade="all, delete-orphan")
     # for DBStorage
     amenities = relationship('Amenity',
-                             secondary="place_amenity", viewonly=False)
+                             secondary="place_amenity", viewonly=False, back_populates="place_amenities")
 
     if getenv("HBNB_TYPE_STORAGE", None) != "db":
         @property
