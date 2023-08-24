@@ -49,18 +49,18 @@ class DBStorage:
 
         result = {}
         if cls:
-            objects = self.__session.query(eval(cls)).all()
+            objects_query = self.__session.query(cls)
 
-            for obj in objects:
-                key = f'{type(obj).__name__}.{obj.id}'
+            for obj in objects_query.all():
+                key = f'{obj.__class__.__name__}.{obj.id}'
                 result[key] = obj
 
         else:
             classes = ['User', 'State', 'City', 'Amenity', 'Place', 'Review']
             for Class in classes:
-                objects = self.__session.query(eval(Class)).all()
-                for obj in objects:
-                    key = f'{type(obj).__name__}.{obj.id}'
+                objects_query = self.__session.query(Class)
+                for obj in objects_query.all():
+                    key = f'{obj.__class__.__name__}.{obj.id}'
                     result[key] = obj
         return result
 

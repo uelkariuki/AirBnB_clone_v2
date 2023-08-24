@@ -39,7 +39,17 @@ class BaseModel:
     def __str__(self):
         """Returns a string representation of the instance"""
         cls = (str(type(self)).split('.')[-1]).split('\'')[0]
+
+        if "_sa_instance_state" in self.__dict__:
+            self.__dict__.pop("_sa_instance_state")
         return '[{}] ({}) {}'.format(cls, self.id, self.__dict__)
+
+    def __repr__(self):
+        """Returns a string representation of an object"""
+        # !r flag calls repr on value before formatting it to a string
+        obj_data = ", ".join(f"{key}={value!r}" for key,
+                             value in self.__dict__.items())
+        return f"[{self.__class__.__name__}] ({self.id}) {{{obj_data}}}"
 
     def save(self):
         """Updates updated_at with current time when instance is changed"""
@@ -58,8 +68,6 @@ class BaseModel:
         dictionary['created_at'] = self.created_at.isoformat()
         dictionary['updated_at'] = self.updated_at.isoformat()
 
-        if hasattr(self, "_sa_instance_state") in dictionary:
-            del dictionary["_sa_instance_state"]
         return dictionary
 
     def delete(self):
