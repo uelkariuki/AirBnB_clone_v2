@@ -231,15 +231,18 @@ class HBNBCommand(cmd.Cmd):
         new_args = args.split(' ')
 
         if new_args and new_args[0] in HBNBCommand.classes:
-            print_list = []
-            for k, v in storage.all(new_args[0]).items():
-                print_list.append(str(v))
+            cls_name = new_args[0]
+
+            for k, v in storage.all(cls_name).items():
+                obj_repr = f"[{cls_name}] ({k}) {v}"
+                print_list.append(obj_repr)
             print(print_list)
 
         elif not new_args:
-            print_list = []
-            for k, v in storage.all().items():
-                print_list.append(str(v))
+            for cls_name in HBNBCommand.classes:
+                for k, v in storage.all(cls_name).items():
+                    obj_repr = f"[{cls_name}] ({k}) {v}"
+                    print_list.append(obj_repr)
             print(print_list)
         else:
             print("** class doesn't exist **")
