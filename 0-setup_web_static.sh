@@ -60,5 +60,5 @@ sudo rm -rf /data/web_static/releases/test/test
 sudo chown -R ubuntu:ubuntu /data/
 
 sudo sed -i '/^\tlocation \/ {/i \\tlocation \/hbnb_static\/ {\n\t\talias \/data\/web_static\/current\/;\n\t}\n' /etc/nginx/sites-available/default
-
+service nginx restart
 exit 0
