@@ -35,7 +35,7 @@ fi
 # Create a fake HTML file /data/web_static/releases/test/index.html
 # (with simple content, to test your Nginx configuration)
 
-sudo mkdir -p /data/web_static/releases/test
+sudo mkdir -p /data/web_static/releases/test/
 
 cat > /data/web_static/releases/test/index.html <<EOL
 <!DOCTYPE html>
@@ -48,13 +48,13 @@ cat > /data/web_static/releases/test/index.html <<EOL
 </html>
 EOL
 
-sudo chown -R www-data:www-data /data/web_static/releases/
+# sudo chown -R www-data:www-data /data/web_static/releases/
 
 # Create a symbolic link /data/web_static/current linked to the
 # /data/web_static/releases/test/ folder. If the symbolic link already exists,
 # it should be deleted and recreated every time the script is ran.
-ln -sf /data/web_static/releases/test/ /data/web_static/current
-
+ln -sf /data/web_static/releases/test /data/web_static/current
+sudo rm -rf /data/web_static/releases/test/test
 # Give ownership of the /data/ folder to the ubuntu user AND group (you can assume this user and group exist).
 # This should be recursive; everything inside should be created/owned by this user/group.
 sudo chown -R ubuntu:ubuntu /data/
