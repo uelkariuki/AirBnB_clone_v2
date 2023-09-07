@@ -2,6 +2,7 @@
 """ """
 from tests.test_models.test_base_model import test_basemodel
 from models.place import Place
+import os
 
 
 class test_Place(test_basemodel):
@@ -21,7 +22,9 @@ class test_Place(test_basemodel):
     def test_user_id(self):
         """ """
         new = self.value()
-        self.assertEqual(type(new.user_id), str)
+        self.assertEqual(type(new.user_id), str
+                         if os.getenv('HBNB_TYPE_STORAGE') != 'db'
+                         else type(None))
 
     def test_name(self):
         """ """
