@@ -59,4 +59,6 @@ sudo rm -rf /data/web_static/releases/test/test
 # This should be recursive; everything inside should be created/owned by this user/group.
 sudo chown -R ubuntu:ubuntu /data/
 
+sudo sed -i '/^\tlocation \/ {/i \\tlocation \/hbnb_static\/ {\n\t\talias \/data\/web_static\/current\/;\n\t}\n' /etc/nginx/sites-available/default
+
 exit 0
