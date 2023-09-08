@@ -17,10 +17,8 @@ def do_deploy(archive_path):
     if os.path.isfile(archive_path) is False:
         return False
 
-
     # Uncompress the archive to the folder /data/web_static/releases/
     # <archive filename without extension> on the web server
-
     archive_filename = archive_path.split("/")[-1]
     archive_name = archive_filename.split(".")[0]
     # Upload the archive to the /tmp/ directory of the web server
@@ -29,7 +27,8 @@ def do_deploy(archive_path):
         return False
     if run(f'rm -rf /data/web_static/releases/{archive_name}/').failed is True:
         return False
-    if run(f'mkdir -p /data/web_static/releases/{archive_name}/').failed is True:
+    if run(f'mkdir -p /data/web_static/releases/{archive_name}/')\
+       .failed is True:
         return False
     if run(f'tar -xzf /tmp/{archive_filename} -C\
  /data/web_static/releases/{archive_name}/').failed is True:
@@ -39,10 +38,11 @@ def do_deploy(archive_path):
         return False
 
     if run(f'mv /data/web_static/releases/{archive_name}/web_static/* '
-        f'/data/web_static/releases/{archive_name}/').failed is True:
+           f'/data/web_static/releases/{archive_name}/').failed is True:
         return False
 
-    if run(f'rm -rf /data/web_static/releases/{archive_name}/web_static/* ').failed is True:
+    if run(f'rm -rf /data/web_static/releases/{archive_name}/web_static/* ')\
+       .failed is True:
         return False
     # Delete the symbolic link /data/web_static/current from the web server
     if run(f'rm -rf /data/web_static/current').failed is True:
