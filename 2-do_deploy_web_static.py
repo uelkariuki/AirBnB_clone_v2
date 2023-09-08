@@ -17,38 +17,45 @@ def do_deploy(archive_path):
     if os.path.isfile(archive_path) is False:
         return False
 
-    try:
-        # Uncompress the archive to the folder /data/web_static/releases/
-        # <archive filename without extension> on the web server
 
-        archive_filename = archive_path.split("/")[-1]
-        archive_name = archive_filename.split(".")[0]
-        # Upload the archive to the /tmp/ directory of the web server
+    # Uncompress the archive to the folder /data/web_static/releases/
+    # <archive filename without extension> on the web server
 
-        put(archive_path, f'/tmp/{archive_filename}')
-        run(f'rm -rf /data/web_static/releases/{archive_name}/')
-        run(f'mkdir -p /data/web_static/releases/{archive_name}/')
-        run(f'tar -xzf /tmp/{archive_filename} -C\
- /data/web_static/releases/{archive_name}/')
-        # Delete the archive from the web server
-        run(f'rm /tmp/{archive_filename}')
+    archive_filename = archive_path.split("/")[-1]
+    archive_name = archive_filename.split(".")[0]
+    # Upload the archive to the /tmp/ directory of the web server
 
-        run(f'mv /data/web_static/releases/{archive_name}/web_static/* '
-            f'/data/web_static/releases/{archive_name}/')
-
-        run(f'rm -rf /data/web_static/releases/{archive_name}/web_static/* ')
-        # Delete the symbolic link /data/web_static/current from the web server
-        run(f'rm -rf /data/web_static/current')
-
-        # Create a new the symbolic link /data/web_static/current on the
-        # web server linked to the new version of your code (/data/web_static/
-        # releases/<archive filename without extension>)
-
-        run(f'ln -s /data/web_static/releases/{archive_name}/\
- /data/web_static/current')
-
-        # Returns True if all operations have been done correctly,
-        # otherwise returns False
-        return True
-    except Exception:
+    if put(archive_path, f'/tmp/{archive_filename}').failed is True:
         return False
+    if run(f'rm -rf /data/web_static/releases/{archive_name}/').failed is True:
+        return False
+    if run(f'mkdir -p /data/web_static/releases/{archive_name}/').failed is True:
+        return False
+    if run(f'tar -xzf /tmp/{archive_filename} -C\
+ /data/web_static/releases/{archive_name}/').failed is True:
+        return False
+    # Delete the archive from the web server
+    if run(f'rm /tmp/{archive_filename}').failed is True:
+        return False
+
+    if run(f'mv /data/web_static/releases/{archive_name}/web_static/* '
+        f'/data/web_static/releases/{archive_name}/').failed is True:
+        return False
+
+    if run(f'rm -rf /data/web_static/releases/{archive_name}/web_static/* ').failed is True:
+        return False
+    # Delete the symbolic link /data/web_static/current from the web server
+    if run(f'rm -rf /data/web_static/current').failed is True:
+        return False
+
+    # Create a new the symbolic link /data/web_static/current on the
+    # web server linked to the new version of your code (/data/web_static/
+    # releases/<archive filename without extension>)
+
+    if run(f'ln -s /data/web_static/releases/{archive_name}/\
+ /data/web_static/current').failed is True:
+        return False
+
+    # Returns True if all operations have been done correctly,
+    # otherwise returns False
+    return True
