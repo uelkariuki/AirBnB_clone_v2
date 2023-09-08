@@ -53,11 +53,12 @@ EOL
 # Create a symbolic link /data/web_static/current linked to the
 # /data/web_static/releases/test/ folder. If the symbolic link already exists,
 # it should be deleted and recreated every time the script is ran.
-ln -sf /data/web_static/releases/test /data/web_static/current
-sudo rm -rf /data/web_static/releases/test/test
+ln -sf /data/web_static/releases/test/ /data/web_static/current
+
 # Give ownership of the /data/ folder to the ubuntu user AND group (you can assume this user and group exist).
 # This should be recursive; everything inside should be created/owned by this user/group.
-sudo chown -R ubuntu:ubuntu /data/
+sudo chown -R ubuntu /data/
+sudo chgrp -R ubuntu /data/
 
 sudo sed -i '/^\tlocation \/ {/i \\tlocation \/hbnb_static\/ {\n\t\talias \/data\/web_static\/current\/;\n\t}\n' /etc/nginx/sites-available/default
 service nginx restart
