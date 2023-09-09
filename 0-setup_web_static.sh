@@ -48,7 +48,6 @@ cat > /data/web_static/releases/test/index.html <<EOL
 </html>
 EOL
 
-# sudo chown -R www-data:www-data /data/web_static/releases/
 
 # Create a symbolic link /data/web_static/current linked to the
 # /data/web_static/releases/test/ folder. If the symbolic link already exists,
