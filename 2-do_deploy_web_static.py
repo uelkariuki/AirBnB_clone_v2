@@ -5,6 +5,7 @@ distributes an archive to your web servers, using the function do_deploy:
 """
 
 from fabric.api import run, env, run, put, sudo, local
+from fabric.contrib import files
 import os.path
 """ Importing the required modules"""
 
@@ -26,10 +27,10 @@ def do_deploy(archive_path):
     path_archive_name = f'/data/web_static/releases/{archive_name}'
     if put(archive_path, f'/tmp/{archive_filename}').failed is True:
         return False
-    if run(f'sudo rm -rf /data/web_static/releases/\
-{archive_name}/').failed is True:
-        return False
-    if run(f'mkdir -p {path_archive_name}/').failed is True:
+    # if run(f'sudo rm -rf /data/web_static/releases/\
+    # {archive_name}/').failed is True:
+    # return False
+    if run(f'mkdir -p {path_archive_name}').failed is True:
         return False
     if run(f'tar -xzf /tmp/{archive_filename} -C {path_archive_name}/').failed is True:
         return False
@@ -37,8 +38,9 @@ def do_deploy(archive_path):
     if run(f'sudo rm /tmp/{archive_filename}').failed is True:
         return False
 
-    if run(f'mv {path_archive_name}/web_static/* {path_archive_name}/').failed is True:
-        return False
+    if files.exists(path_archive_name) is False:
+        if run(f'mv {path_archive_name}/web_static/* {path_archive_name}/').failed is True:
+            return False
 
     if run(f'sudo rm -rf {path_archive_name}/web_static').failed is True:
         return False
