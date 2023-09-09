@@ -40,7 +40,7 @@ def do_deploy(archive_path):
     if run(f'mv {path_archive_name}/web_static/* {path_archive_name}/').failed is True:
         return False
 
-    if run(f'sudo rm -rf {path_archive_name}/web_static/* ').failed is True:
+    if run(f'sudo rm -rf {path_archive_name}/web_static').failed is True:
         return False
     # Delete the symbolic link /data/web_static/current from the web server
     if run(f'sudo rm -rf /data/web_static/current').failed is True:
