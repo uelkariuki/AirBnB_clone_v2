@@ -14,17 +14,21 @@ env.hosts = ["34.202.164.69", "100.25.41.114"]
 def do_deploy(archive_path):
     """ Function to help distributes an archive to the web servers"""
 
-    if os.path.isfile(archive_path) is False:
-        return False
+    # check if the codde is running locally or on remote hosts
+    local_running = os.getenv("runned_locally", None)
+    if local_running is None:
+        # code for running locally (before deployment to the remote hosts)
 
-    if env.host == 'localhost':
-        cmd = local
-    else:
-        cmd = run
+        if os.path.isfile(archive_path) is False:
+            return False
+        # set the runned_locally environment variable to prevent running
+        # these commands again on remote hosts
+        os.environ["runned_locally"] = "True"
     # Uncompress the archive to the folder /data/web_static/releases/
     # <archive filename without extension> on the web server
-    archive_filename = archive_path.split("/")[-1]
-    archive_name = archive_filename.split(".")[0]
+    archive_filename = os.path.basename(archive_path)
+    archive_name = os.path.splitext(archive_filename)[0]
+
     # Upload the archive to the /tmp/ directory of the web server
 
     if put(archive_path, f'/tmp/{archive_filename}').failed is True:
