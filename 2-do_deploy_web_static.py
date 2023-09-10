@@ -53,7 +53,7 @@ def do_deploy(archive_path):
         # <archive filename without extension> on the web server
         archive_filename = archive_path.split("/")[-1]
         archive_name = archive_filename.split(".")[0]
-
+        remove_folder = '/data/web_static/releases/{archive_name}/web_static/*'
         # check if the code is running locally or on remote hosts
         run_locally = os.getenv("run_locally", None)
         if run_locally is None:
@@ -61,8 +61,14 @@ def do_deploy(archive_path):
             local(f'mkdir -p /data/web_static/releases/{archive_name}')
             local(f'tar -xzf {archive_path} -C\
  /data/web_static/releases/{archive_name}/')
+
+            local(f'mv /data/web_static/releases/{archive_name}/web_static/* '
+                  f'/data/web_static/releases/{archive_name}/')
+            local(f'rm -rf {remove_folder}')
+            local(f'rm -rf /data/web_static/current')
             local(f'rm -rfR /data/web_static/current')
-            local(f'ln -s /data/web_static/releases/{archive_name}/ /data/web_static/current')
+            local(f'ln -s /data/web_static/releases/{archive_name}/\
+ /data/web_static/current')
             os.environ['run_locally'] = "True"
 
         # Upload the archive to the /tmp/ directory of the web server
