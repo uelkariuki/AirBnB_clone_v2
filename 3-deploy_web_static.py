@@ -7,6 +7,7 @@ using the function deploy:
 
 from fabric.api import run, env, run, put, sudo, local
 from datetime import datetime
+import os
 from imported_pack_web_static import do_pack
 from imported_do_deploy_web_static import do_deploy
 """ Importing the required modules """
@@ -18,10 +19,10 @@ def deploy():
     """
     Function that creates and distributes an archive to your web servers
     """
-
-    created_archive = do_pack()
-
+    created_archive = os.getenv('created_archive', None)
     if created_archive is None:
+        created_archive = do_pack()
+        os.environ['created_archive'] = created_archive
         return False
 
     return do_deploy(created_archive)
