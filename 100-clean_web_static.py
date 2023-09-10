@@ -42,19 +42,20 @@ def do_clean(number=0):
     number: is the number of the archives, including the most recent, to keep.
     """
 
-    number = int(number)
     # keep at least one version if the number is less than 1
+    number = 1 if int(number) == 0 else int(number)
 
-    if number < 1:
-        number = 1
+    present_archives = sorted(os.listdir("versions"))
 
-    # Add 1 to exclude the most recent version
-    number = number + 1
-    created_archive = os.getenv('created_archive', None)
-    if created_archive is None:
-        # Delete old versions  in versions folder
-        local(f'ls -1t versions | tail -n +{number} | xargs rm -f --')
-        os.environ['created_archive'] = created_archive
+    [present_archives.pop() for q in range(number)]
 
-    run(f'ls -1t /data/web_static/releases | tail -n +{number}\
-        | xargs rm -f --')
+    with lcd("versions"):
+        [local(f'rm ./{arch}') for arch in present_archives]
+
+    with cd("/data/web_static/releases"):
+        archives = run("ls -tr").split()
+        archives = [arch for arch in archives if "web_static_" in arch]
+
+        [archives.pop() for q in range(number)]
+
+        [run(f'rm -rf ./{arch}') for arch in archives]
