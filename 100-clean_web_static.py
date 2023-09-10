@@ -50,9 +50,11 @@ def do_clean(number=0):
 
     # Add 1 to exclude the most recent version
     number = number + 1
-
-    # Delete old versions  in versions folder
-    local(f'ls -1t versions | tail -n +{number} | xargs rm -f --')
+    created_archive = os.getenv('created_archive', None)
+    if created_archive is None:
+        # Delete old versions  in versions folder
+        local(f'ls -1t versions | tail -n +{number} | xargs rm -f --')
+        os.environ['created_archive'] = created_archive
 
     run(f'ls -1t /data/web_static/releases | tail -n +{number}\
         | xargs rm -f --')
