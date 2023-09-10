@@ -8,6 +8,7 @@ using the function deploy:
 
 from fabric.api import run, env, run, put, sudo, local
 from datetime import datetime
+import re
 import os
 from imported_pack_web_static import do_pack
 from imported_do_deploy_web_static import do_deploy
@@ -42,20 +43,33 @@ def do_clean(number=0):
     number: is the number of the archives, including the most recent, to keep.
     """
 
-    # keep at least one version if the number is less than 1
-    number = 1 if int(number) == 0 else int(number)
+    number = int(number)
 
-    present_archives = sorted(os.listdir("versions"))
+    number = 1 if number <= 1 else number
+    path_Release = '/data/web_static/releases/'
 
-    [present_archives.pop() for q in range(number)]
+    archive_left = os.getenv('archive_left', None)
 
-    with lcd("versions"):
-        [local(f'rm ./{arch}') for arch in present_archives]
+    if archive_left is None:
+        versions = [
+                re.findall(r'\d+', version)[0] for version in
+                os.listdir('./versions')]
 
-    with cd("/data/web_static/releases"):
-        archives = run("ls -tr").split()
-        archives = [arch for arch in archives if "web_static_" in arch]
+        archive_left = '|'.join(sorted(versions)[-number:])
 
-        [archives.pop() for q in range(number)]
+        os.environ['archive_left'] = archive_left
 
-        [run(f'rm -rf ./{arch}') for arch in archives]
+        local((
+            "find {} -maxdepth 1 -name \"{}\" " +
+            "-type d | grep -Ev \"{}\" | xargs rm -rf").format(
+            path_Release, "web_static*", archive_left))
+
+        local((
+            "find versions -maxdepth 1 -name" +
+            " \"{}\" -type f | grep -Ev \"{}\" | xargs rm -rf").format(
+                "web_static*", archive_left))
+
+    run((
+        "find {} -maxdepth 1 -name \"{}\" " +
+        "-type d | grep -Ev \"{}\" | xargs rm -rf").format(
+        path_Release, "web_static*", archive_left))
