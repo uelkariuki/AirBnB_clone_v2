@@ -14,7 +14,7 @@ env.hosts = ["34.202.164.69", "100.25.41.114"]
 def do_deploy(archive_path):
     """ Function to help distributes an archive to the web servers"""
 
-    # check if the codde is running locally or on remote hosts
+    """# check if the codde is running locally or on remote hosts
     local_running = os.getenv("runned_locally", None)
     if local_running is None:
         # code for running locally (before deployment to the remote hosts)
@@ -23,7 +23,10 @@ def do_deploy(archive_path):
             return False
         # set the runned_locally environment variable to prevent running
         # these commands again on remote hosts
-        os.environ["runned_locally"] = "True"
+        os.environ["runned_locally"] = "True"""
+
+    if os.path.isfile(archive_path) is False:
+        return False
     # Uncompress the archive to the folder /data/web_static/releases/
     # <archive filename without extension> on the web server
     archive_filename = os.path.basename(archive_path)
