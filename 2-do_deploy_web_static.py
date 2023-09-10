@@ -39,7 +39,6 @@ def do_pack():
 Fabric script (based on the file 1-pack_web_static.py) that
 distributes an archive to your web servers, using the function do_deploy:
 """
-""" Importing the required modules"""
 
 env.hosts = ['34.202.164.69', '100.25.41.114']
 
@@ -57,21 +56,14 @@ def do_deploy(archive_path):
 
         # check if the code is running locally or on remote hosts
         run_locally = os.getenv("run_locally", None)
-        if run_locally is not None:
-            l_archive_path = os.path.join('/tmp', archive_filename)
-            l_target_path = os.path.join('/data/web_static/releases',
-                                         archive_name)
-            local(f'rm -rf {l_target_path}')
-            local(f'mkdir -p {l_target_path}')
-            local(f'tar -xzf {l_archive_path} -C {l_target_path}')
-            local(f'rm {l_archive_path}')
-
-            local(f'mv {os.path.join(l_target_path, "/web_static/*")}'
-                  f'/data/web_static/releases/{archive_name}/')
-
-            local(f'rm -rf {os.path.join(l_target_path, "/web_static/*")}')
+        if run_locally is None:
+            local(f'rm -rf /data/web_static/releases/{archive_name}/')
+            local(f'mkdir -p /data/web_static/releases/{archive_name}')
+            local(f'tar -xzf {archive_path} -C\
+ /data/web_static/releases/{archive_name}/')
             local(f'rm -rf /data/web_static/current')
-            local(f'ln -s {l_target_path} /data/web_static/current')
+            local(f'ln -s /data/web_static/releases/{archive_name}/\
+ /data/web_static/current')
             os.environ['run_locally'] = "True"
 
         # Upload the archive to the /tmp/ directory of the web server
