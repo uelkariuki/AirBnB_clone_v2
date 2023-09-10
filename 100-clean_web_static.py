@@ -11,7 +11,7 @@ from datetime import datetime
 import os
 from imported_pack_web_static import do_pack
 from imported_do_deploy_web_static import do_deploy
-""" Importing the required modules """
+""" Importing the required modules"""
 
 env.hosts = ["34.202.164.69", "100.25.41.114"]
 
