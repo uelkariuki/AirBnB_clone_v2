@@ -2,11 +2,12 @@
 
 """
 Script that starts a Flask web application with "/" route, "/",
-"/c/<text>", "/python/<text>", "/number/<n>" routes defined
+"/c/<text>", "/python/<text>", "/number/<n>", "/number_template/<n>"
+routes defined
 """
 
 
-from flask import Flask
+from flask import Flask, render_template
 """ Importing Flask, request"""
 
 
@@ -44,8 +45,14 @@ def python_route(text="is cool"):
 
 @app.route("/number/<int:n>")
 def number_route(n):
-    """ Defines the /number/n route"""
+    """ Defines the '/number/<n>' route"""
     return f"{n} is a number"
+
+
+@app.route("/number_template/<int:n>")
+def inumber_template_route(n):
+    """ Defines the '/number_template/<n>' route"""
+    return render_template('5-number.html', n=n)
 
 
 if __name__ == '__main__':

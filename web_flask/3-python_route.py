@@ -6,7 +6,7 @@ Script that starts a Flask web application with "/" route, "/",
 """
 
 
-from flask import Flask, request
+from flask import Flask
 """ Importing Flask, request"""
 
 
