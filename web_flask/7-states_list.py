@@ -73,7 +73,7 @@ def teardown_appcontext(exception):
 def states_list():
     """ Defines the '/states_list' route"""
     states_dictionary = storage.all(State)
-    states = states_dictionary.values()
+    states = sorted(states_dictionary.values(), key=lambda state: state.name)
     return render_template('7-states_list.html', states=states)
 
 
