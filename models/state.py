@@ -31,8 +31,8 @@ class State(BaseModel, Base):
         # get all the cities in a dictionary
             total_cities = storage.all(City)
 
+            city_result = []
             for city in total_cities.values():
-                city_result = []
                 if city.state_id == self.id:
                     city_result.append(city)
             return city_result
