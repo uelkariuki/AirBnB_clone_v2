@@ -100,10 +100,6 @@ class DBStorage:
         Session = scoped_session(Session_make)
         self.__session = Session()
 
-    # def close(self):
-    # """ method to close the SQLALchemy session"""
-    #    self.__session.close()
-
     def close(self):
-        """ a public method def close(self):"""
-        self.__session.remove()
+        """ method to close the SQLALchemy session"""
+        self.__session.close()
