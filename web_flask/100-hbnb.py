@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
 """
-Script that starts a Flask web application with "/" route, "/",
+Script that starts a Flask web application with "/" route, "/hbnb",
 "/c/<text>", "/python/<text>", "/number/<n>", "/number_template/<n>",
-"/states_list", "/cities_by_states", "/cities_by_states", "/hbnb_filters" routes defined
+"/states_list", "/cities_by_states", "/cities_by_states",
+"/hbnb_filters" routes defined
 """
 
 
@@ -26,16 +27,12 @@ def home_page():
 @app.route("/hbnb", strict_slashes=False)
 def alt_home_page():
     """ Defines the route "/hbnb" """
-    states_dict = storage.all(State)
-    states = sorted(states_dict.values(), key=lambda state: state.name)
-    cities_dict = storage.all(City)
-    cities = sorted(cities_dict.values(), key=lambda city: city.name)
-    amenity_dict= storage.all(Amenity)
-    amenity = sorted(amenity_dict.values(), key=lambda amenity: amenity.name)
-    place_dict = storage.all(Place)
-    place = sorted(place_dict.values(), key=lambda place: place.name)
+    states = storage.all(State)
+    amenities = storage.all(Amenity)
+    places = storage.all(Place)
 
-    return render_template('100-hbnb.html', states=states, cities=cities, amenity=amenity, place=place)
+    return render_template('100-hbnb.html', states=states,
+                           amenities=amenities, places=places)
 
 
 @app.route("/c/<text>", strict_slashes=False)
@@ -126,13 +123,10 @@ def states_id(id):
 @app.route("/hbnb_filters", strict_slashes=False)
 def hbnb_filters():
     """ Defines the '/hbnb_filters' route"""
-    states_dict = storage.all(State)
-    states = sorted(states_dict.values(), key=lambda state: state.name)
-    cities_dict = storage.all(City)
-    cities = sorted(cities_dict.values(), key=lambda city: city.name)
-    amenity_dict= storage.all(Amenity)
-    amenity = sorted(amenity_dict.values(), key=lambda amenity: amenity.name)
-    return render_template('10-hbnb_filters.html', states=states, cities=cities, amenity=amenity)
+    states = storage.all(State)
+    amenities = storage.all(Amenity)
+    return render_template('10-hbnb_filters.html', states=states,
+                           amenities=amenities)
 
 
 if __name__ == '__main__':
