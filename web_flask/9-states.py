@@ -102,7 +102,11 @@ def states():
 def states_id(id):
     """ Defines the '/states/<id>' route"""
     states = storage.all(State).values()
-    state = next((state for state in states if state.id == id), None)
+    state = None
+    for s in states:
+        if s.id == id:
+            state = s
+            break
 
     if state is not None:
         state.cities = sorted(state.cities, key=lambda city: city.name)
