@@ -2,8 +2,9 @@
 
 """
 Script that starts a Flask web application with "/" route, "/",
-"/c/<text>", "/python/<text>", "/number/<n>", "/number_template/<n>"
-routes, "/states_list", "/cities_by_states" defined
+"/c/<text>", "/python/<text>", "/number/<n>", "/number_template/<n>",
+"/states_list", "/cities_by_states", "/states", "/states/<id>" routes
+defined
 """
 
 

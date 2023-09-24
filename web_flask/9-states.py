@@ -2,14 +2,15 @@
 
 """
 Script that starts a Flask web application with "/" route, "/",
-"/c/<text>", "/python/<text>", "/number/<n>", "/number_template/<n>",
-"/states_list" routes defined
+"/c/<text>", "/python/<text>", "/number/<n>", "/number_template/<n>"
+routes, "/states_list", "/cities_by_states", "/cities_by_states" defined
 """
 
 
 from flask import Flask, render_template
 from models import storage
 from models.state import State
+from models.city import City
 """ Importing Flask, request and other required modules"""
 
 
@@ -75,6 +76,38 @@ def states_list():
     states_dictionary = storage.all(State)
     states = sorted(states_dictionary.values(), key=lambda state: state.name)
     return render_template('7-states_list.html', states=states)
+
+
+@app.route("/cities_by_states", strict_slashes=False)
+def cities_by_states():
+    """ Defines the '/cities_by_states' route"""
+    states_dictionary = storage.all(State)
+    states = sorted(states_dictionary.values(), key=lambda state: state.name)
+
+    for state in states:
+        state.cities = sorted(state.cities, key=lambda city: city.name)
+    return render_template('8-cities_by_states.html', states=states)
+
+
+@app.route("/states", strict_slashes=False)
+def states():
+    """ Defines the '/states' route"""
+    states_dictionary = storage.all(State)
+    states = sorted(states_dictionary.values(), key=lambda state: state.name)
+
+    return render_template('9-states.html', states=states)
+
+
+@app.route("/states/<id>", strict_slashes=False)
+def states_id(id):
+    """ Defines the '/states/<id>' route"""
+    states = storage.all(State).values()
+    state = next((state for state in states if state.id == id), None)
+
+    if state is not None:
+        state.cities = sorted(state.cities, key=lambda city: city.name)
+
+    return render_template('9-states.html', state=state)
 
 
 if __name__ == '__main__':
