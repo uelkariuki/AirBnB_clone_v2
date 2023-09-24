@@ -3,7 +3,7 @@
 """
 Script that starts a Flask web application with "/" route, "/",
 "/c/<text>", "/python/<text>", "/number/<n>", "/number_template/<n>",
-"/states_list", "/cities_by_states", "/cities_by_states" routes defined
+"/states_list", "/cities_by_states", "/cities_by_states", "/hbnb_filters" routes defined
 """
 
 
@@ -92,18 +92,38 @@ def cities_by_states():
 @app.route("/states", strict_slashes=False)
 def states():
     """ Defines the '/states' route"""
-    states = storage.all(State)
-    return render_template('9-states.html', state=states)
+    states_dictionary = storage.all(State)
+    states = sorted(states_dictionary.values(), key=lambda state: state.name)
+
+    return render_template('9-states.html', states=states)
 
 
 @app.route("/states/<id>", strict_slashes=False)
 def states_id(id):
     """ Defines the '/states/<id>' route"""
     states = storage.all(State).values()
-    for state in states:
-        if state.id == id:
-            return render_template('9-states.html', state=state)
-    return render_template('9-states.html')
+    state = None
+    for s in states:
+        if s.id == id:
+            state = s
+            break
+
+    if state is not None:
+        state.cities = sorted(state.cities, key=lambda city: city.name)
+
+    return render_template('9-states.html', state=state)
+
+
+@app.route("/hbnb_filters", strict_slashes=False)
+def hbnb_filters():
+    """ Defines the '/hbnb_filters' route"""
+    states_dict = storage.all(State)
+    states = sorted(states_dict.values(), key=lambda state: state.name)
+    cities_dict = storage.all(City)
+    cities = sorted(cities_dict.values(), key=lambda city: city.name)
+    amenity_dict= storage.all(Amenity)
+    amenity = sorted(amenity_dict.values(), key=lambda amenity: amenity.name)
+    return render_template('10-hbnb_filters.html', states=states, cities=cities, amenity=amenity)
 
 
 if __name__ == '__main__':
